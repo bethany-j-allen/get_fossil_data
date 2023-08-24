@@ -14,10 +14,11 @@
 #     analysis.
 
 # We will be using dplyr to manipulate our data
-utils::install.packages(c("dplyr", "ggplot"), dependencies = TRUE)
+utils::install.packages(c("dplyr", "ggplot2"), dependencies = TRUE)
 
 # And load these into memory:
-library(dplyr, ggplot)
+library(dplyr)
+library(ggplot2)
 
 # To access our fossil data, we are going to take advantage of the Paleobiology
 # Database's "API" (short for Application Programming Interface), which lets us
