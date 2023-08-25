@@ -27,8 +27,8 @@ library(ggplot2)
 #
 # We can begin by setting up some variables:
 Taxa <- "Canidae" # Set "Taxa" as the taxonomic group of interest
-StartInterval <- "Paleocene" # Set start interval for sampling window
-StopInterval <- "Oligocene" # Set stop interval for sampling window
+StartInterval <- "Miocene" # Set start interval for sampling window
+StopInterval <- "Pliocene" # Set stop interval for sampling window
 
 # In case you want to alter these for your own purposes, you should also run
 # the following lines which will ensure things get formatted properly for use
@@ -131,6 +131,31 @@ utils::read.csv("https://paleobiodb.org/data1.2/occs/list.csv?taxon_id=291933&sh
 # nothing to stop people naming a group of plants and a group of animals the
 # same name!
 
+# We will now take a look at the taxonomic contents of our dataset via the
+# 'accepted_name' column. This gives us the identifications of our occurrences
+# including any taxonomic updates (e.g. synonymisations, species transferred to
+# different genera, *nomen dubia*).
+unique(RawData$accepted_name)
+
+# Do you notice anything concerning? Perhaps not at first glance, but what about
+# this?
+grep("ferox", unique(RawData$accepted_name))
+
+# Two species are listed with the name 'ferox'. We can see their full names by
+# merging the two lines above:
+unique(RawData$accepted_name)[grep("ferox", unique(RawData$accepted_name))]
+
+# Are these different species which were both named 'ferox', or are they the
+# same species which has been transferred between genera, and the PBDB has
+# failed to collapse them together?
+# If we look at their full taxon pages, we can see that were named by different
+# authors, and are in fact fully independent species:
+utils::browseURL("https://paleobiodb.org/classic/basicTaxonInfo?taxon_no=43762")
+utils::browseURL("https://paleobiodb.org/classic/basicTaxonInfo?taxon_no=44840")
+
+# Otherwise, the dataset meets our expectations, so we will continue to
+# explore the data a little more.
+#
 # It's good practice to save your download for posterity. First you will need
 # to set a working directory - this tells R where to save your file (and look
 # for files you want to load into R). This requires a file path to the folder
