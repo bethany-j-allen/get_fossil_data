@@ -13,17 +13,16 @@
 # 3. Explore the dataset and identify some potential issues for conducting data
 #     analysis.
 
-# We will be using dplyr to manipulate our data
-utils::install.packages(c("dplyr", "ggplot2"), dependencies = TRUE)
+# We will be using dplyr to manipulate our data, so we need to download it...
+utils::install.packages("dplyr", dependencies = TRUE)
 
-# And load these into memory:
+# ... and load it into memory:
 library(dplyr)
-library(ggplot2)
 
 # To access our fossil data, we are going to take advantage of the Paleobiology
 # Database's "API" (short for Application Programming Interface), which lets us
 # "download" data directly into R. We are going to download a dataset of canids
-# (dogs) from the Paleogene.
+# (dogs) from the Neogene.
 #
 # We can begin by setting up some variables:
 Taxa <- "Canidae" # Set "Taxa" as the taxonomic group of interest
@@ -134,7 +133,7 @@ utils::read.csv("https://paleobiodb.org/data1.2/occs/list.csv?taxon_id=291933&sh
 # We will now take a look at the taxonomic contents of our dataset via the
 # 'accepted_name' column. This gives us the identifications of our occurrences
 # including any taxonomic updates (e.g. synonymisations, species transferred to
-# different genera, *nomen dubia*).
+# different genera, *nomen dubia*) recorded in the PBDB.
 unique(RawData$accepted_name)
 
 # Do you notice anything concerning? Perhaps not at first glance, but what about
@@ -161,17 +160,19 @@ utils::browseURL("https://paleobiodb.org/classic/basicTaxonInfo?taxon_no=44840")
 # for files you want to load into R). This requires a file path to the folder
 # you want to use, e.g. to save to the desktop in Windows you would use:
 setwd("C:/Users/PCname/Desktop")
+
 # You can find the file path of a folder by looking at its properties, but
 # make sure you use forward slashes ( / ) and the same capitalisation. If
 # you run this line and get no response in the console, it has worked.
 
 # You can easily save a .csv using:
-write.csv(RawData, file = "Pg_Canidae.csv")
-# The text in quotes specifies the file name.
+write.csv(RawData, file = "Neogene_Canidae.csv")
 
+# The text in quotes specifies the file name.
+#
 # If you want to pull this saved dataset back into R at a later date, you
 # can use:
-RawData <- read.csv("Pg_Canidae.csv")
+RawData <- read.csv("Neogene_Canidae.csv")
 
 # So, now to actually start manipulating our dataset.
 # First we will simply trim the database fields (columns) to the ones we 
@@ -200,21 +201,25 @@ RawData <- dplyr::distinct(RawData, accepted_name, collection_no,
 # dataset:
 count(RawData, genus)
 
+# Why is the first row blank? These are our occurrences which are identified to
+# a more coarse resolution than genus.
+#
 # We can also take a look at the named earliest time intervals for our
 # occurrences:
 count(RawData, early_interval)
 
-# Most of the names given are from the North American land mammal scheme, with
-# some variation as to the temporal resolution. This could make comparison of
-# the ages of these fossils quite tricky.
+# Many of the names given are from the North American land mammal scheme, such
+# as 'Clarendonian' and 'Hemphillian', with some variation as to the temporal
+# resolution. This could make comparison of the ages of these fossils quite
+# tricky.
 #
 # Does this also mean that our fossils have a strong geographic bias? We can
 # check that by looking at the "cc" column, which contains the country code of
 # the locality:
 count(RawData, cc)
 
-# It seems so! Almost all of our occurrences are from the USA, with a handful 
-# from Canada, China and Mexico.
+# It seems so! Almost all of our occurrences are from the USA ('US'), although
+# many other countries are also represented in the list.
 #
 # Here we have briefly explored some of the features of a standard Paleobiology
 # Database occurrence dataset, and highlighted some potential issues. Next we
